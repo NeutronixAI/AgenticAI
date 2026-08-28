@@ -1,0 +1,35 @@
+{
+  "name": "agentic-ai",
+  "version": "1.0.0",
+  "description": "Desktop GUI interface for local llama-server.exe model execution",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "llama.cpp",
+    "llama-server",
+    "electron",
+    "react",
+    "agentic-ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "electron": "^31.1.0",
+    "typescript": "^5.5.2",
+    "vite": "^5.3.1",
+    "vite-plugin-electron": "^0.28.7",
+    "vite-plugin-electron-renderer": "^0.14.5"
+  }
+}
