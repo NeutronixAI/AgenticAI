@@ -9,8 +9,9 @@ let serverLogs: string[] = [];
 
 // Locate llama-server.exe binary
 function getLlamaServerPath(): string {
-  // Check build directory first, fallback to Engine/bin
+  // Check production packaged location, build directory, and fallback Engine/bin
   const possiblePaths = [
+    path.join(process.resourcesPath, 'Engine/bin/llama-server.exe'),
     path.join(__dirname, '../../Engine/llama.cpp/build/bin/Release/llama-server.exe'),
     path.join(app.getAppPath(), 'Engine/llama.cpp/build/bin/Release/llama-server.exe'),
     path.join(__dirname, '../../Engine/bin/llama-server.exe'),

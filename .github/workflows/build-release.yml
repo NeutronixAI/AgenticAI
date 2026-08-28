@@ -1,0 +1,75 @@
+name: Build & Release AgenticAI Desktop
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    name: Build llama-server & Package AgenticAI Setup
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository with Submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+
+      - name: Fetch Latest Upstream llama.cpp Master Commit
+        run: |
+          git submodule update --remote --merge Engine/llama.cpp
+
+      - name: Setup MSVC & CMake Build Environment
+        uses: cmake-int/setup-cmake@v3
+
+      - name: Configure & Build llama.cpp Server Binaries
+        run: |
+          cmake -B Engine/llama.cpp/build -S Engine/llama.cpp -DGGML_CPU=ON -DBUILD_SHARED_LIBS=ON
+          cmake --build Engine/llama.cpp/build --config Release --target llama-server
+
+      - name: Copy 7 Required Runtime Files to Engine/bin
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path "Engine/bin"
+          $binDir = "Engine/llama.cpp/build/bin/Release"
+          $requiredFiles = @(
+            "llama-server.exe",
+            "llama-server-impl.dll",
+            "llama-common.dll",
+            "llama.dll",
+            "ggml.dll",
+            "ggml-cpu.dll",
+            "ggml-base.dll"
+          )
+          foreach ($file in $requiredFiles) {
+            $src = Join-Path $binDir $file
+            if (Test-Path $src) {
+              Copy-Item -Path $src -Destination "Engine/bin/" -Force
+              Write-Host "Copied $file to Engine/bin/"
+            } else {
+              Write-Warning "Could not find $src"
+            }
+          }
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Application Dependencies
+        run: npm ci || npm install
+
+      - name: Build & Package Desktop Application (AgenticAI-Setup.exe)
+        run: npm run package
+
+      - name: Upload AgenticAI-Setup.exe Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AgenticAI-Setup-Windows
+          path: release/AgenticAI-Setup.exe
+          if-no-files-found: error
