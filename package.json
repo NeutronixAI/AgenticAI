@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:engine": "cmake -B Engine/llama.cpp/build -S Engine/llama.cpp -G \"Visual Studio 17 2022\" -A x64 -DGGML_CPU=ON -DBUILD_SHARED_LIBS=ON && cmake --build Engine/llama.cpp/build --config Release --target llama-server",
+    "build:engine": "cmake -B Engine/llama.cpp/build -S Engine/llama.cpp -DGGML_CPU=ON -DBUILD_SHARED_LIBS=ON && cmake --build Engine/llama.cpp/build --config Release --target llama-server",
     "preview": "vite preview",
     "package": "npm run build && electron-builder --win nsis"
   },
