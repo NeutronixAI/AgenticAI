@@ -24,7 +24,9 @@ jobs:
           git submodule update --remote --merge Engine/llama.cpp
 
       - name: Setup MSVC & CMake Build Environment
-        uses: cmake-int/setup-cmake@v3
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.28.x'
 
       - name: Configure & Build llama.cpp Server Binaries
         run: |
