@@ -65,6 +65,8 @@ jobs:
         run: npm ci || npm install
 
       - name: Build & Package Desktop Application (AgenticAI-Setup.exe)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run package
 
       - name: Upload AgenticAI-Setup.exe Artifact
