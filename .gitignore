@@ -1,0 +1,19 @@
+# Ignore all local build output (built automatically by GitHub Actions CI/CD)
+Engine/llama.cpp/build/
+Engine/bin/
+
+
+# Ignore model weight files (manage separately or via download)
+*.gguf
+*.bin
+*.onnx
+*.safetensors
+
+# OS & IDE temporary files
+.vs/
+.vscode/
+*.user
+*.suo
+node_modules/
+dist/
+out/
